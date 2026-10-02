@@ -6,7 +6,7 @@
 #include "string.h"
 #include "flash.h"
 #include "addac.h"
-#include "joystick.h"
+#include "gpio.h"
 #include "timer.h"
 
 void exercise_3_3(void)

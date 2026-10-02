@@ -5,7 +5,7 @@
 #include "lcd.h"
 #include "string.h"
 #include "flash.h"
-#include "joystick.h"
+#include "gpio.h"
 
 /*
 void uart_send_string(const char *str)

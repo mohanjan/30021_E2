@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 
-#include "joystick.h"
-#include "led.h"
+#include "gpio.h"
 
 void exercise_1_1(void)
 {
