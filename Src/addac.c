@@ -150,8 +150,8 @@ void load_calibration(void)
     }
 
     printf("Loaded calibration:\r\n");
-    printf("CALFACT0: %.6f\r\n", calfact0);
-    printf("CALFACT1: %.6f\r\n", calfact1);
+    //printf("CALFACT0: %.6f\r\n", calfact0);
+    //printf("CALFACT1: %.6f\r\n", calfact1);
 }
 
 
@@ -187,8 +187,8 @@ void calibrate_adc()
     pa0_avg = average_voltage(1);
     pa1_avg = average_voltage(2);
 
-    printf("PA0_Vavg: %.6f V\r\n", pa0_avg);
-    printf("PA1_Vavg: %.6f V\r\n", pa1_avg);
+    //printf("PA0_Vavg: %.6f V\r\n", pa0_avg);
+    //printf("PA1_Vavg: %.6f V\r\n", pa1_avg);
 
     /* Calculate correction factors */
     if (pa0_avg > 0.0f)
@@ -209,8 +209,8 @@ void calibrate_adc()
         calfact1 = 1.0f;
     }
 
-    printf("CALFACT0: %.6f\r\n", calfact0);
-    printf("CALFACT1: %.6f\r\n", calfact1);
+    //printf("CALFACT0: %.6f\r\n", calfact0);
+    //printf("CALFACT1: %.6f\r\n", calfact1);
 
     /* Store calibration factors in flash */
     write_calfacts_flash(calfact0, calfact1);

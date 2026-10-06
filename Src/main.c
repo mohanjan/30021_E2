@@ -9,8 +9,7 @@
 int main(void) {
 	uart_init(9600);
 
-	exercise_4_1();
-
+	exercise_4_2_motorControl();
 	while(1)
 	{
 

@@ -95,8 +95,8 @@ void TIM2_init_50Hz(){
 
     TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_InitStructure.TIM_Prescaler = 5018;
-    TIM_InitStructure.TIM_Period = 255;
+    TIM_InitStructure.TIM_Prescaler = 19;
+    TIM_InitStructure.TIM_Period = 64000;
 
     TIM_TimeBaseInit(TIM2, &TIM_InitStructure);
 
@@ -110,8 +110,8 @@ void TIM16_init_50Hz(){
 
     TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_InitStructure.TIM_Prescaler = 5018;
-    TIM_InitStructure.TIM_Period = 255;
+    TIM_InitStructure.TIM_Prescaler = 19;
+    TIM_InitStructure.TIM_Period = 64000;
 
     TIM_TimeBaseInit(TIM16, &TIM_InitStructure);
 
@@ -141,7 +141,7 @@ void TIM2_PWM_init()
     TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStruct.TIM_Pulse = 128;
+	TIM_OCInitStruct.TIM_Pulse = 12800;
 
     TIM_OC4Init(TIM2, &TIM_OCInitStruct);
 
@@ -160,7 +160,7 @@ void TIM16_PWM_init()
     TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStruct.TIM_Pulse = 128;
+	TIM_OCInitStruct.TIM_Pulse = 12800;
 
     TIM_OC1Init(TIM16, &TIM_OCInitStruct);
 
