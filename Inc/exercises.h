@@ -17,4 +17,5 @@ void exercise_3_2(void);
 void exercise_3_3(void);
 void exercise_4_1(void);
 void exercise_4_2_motorControl(void);
+void exercise_5(void);
 #endif
