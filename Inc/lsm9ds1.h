@@ -8,6 +8,44 @@
 #define LSM9DS1_H_
 
 
+// SPI INIT, READ AND WRITE //
+void init_spi_lsm9ds1(void);
+uint8_t lsm9ds1_read8(uint8_t addr);
+uint16_t lsm9ds1_read16(uint8_t addr);
+void lsm9ds1_write(uint8_t addr, uint8_t data_in);
+void lsm9ds1_write16(uint8_t addr, uint16_t data_in);   // low byte first. TODO only works for magnetometer
+
+
+// MAGNETOMETER REGISTER ADRESSES
+// Register addresses: LSM9DS1 datasheet, magnetometer register map
+// Table 22. Magnetic sensor register address map
+#define MAG_AUTO_INC    0x40    // bit 6 of the SPI address byte: read next register automatically
+
+#define WHO_AM_I_M      0x0F    // should read 0x3D for magnetometer
+#define CTRL_REG1_M     0x20    // temp comp, performance mode XY, data rate
+#define CTRL_REG2_M     0x21    // full-scale range
+#define CTRL_REG3_M     0x22    // SPI mode, conversion mode
+#define CTRL_REG4_M     0x23    // performance mode Z
+#define CTRL_REG5_M     0x24    // block data update
+#define STATUS_REG_M    0x27    // bit 3 = new XYZ data ready
+
+#define OUT_X_L_M       0x28    // high byte is 0x29
+#define OUT_Y_L_M       0x2A    // high byte is 0x2B
+#define OUT_Z_L_M       0x2C    // high byte is 0x2D
+
+#define OFFSET_X_REG_L_M    0x05    // high byte is 0x06
+#define OFFSET_Y_REG_L_M    0x07    // high byte is 0x08
+#define OFFSET_Z_REG_L_M    0x09    // high byte is 0x0A
+// MAGNETOMETER
+// Initialization, read and convert
+int      mag_init(void);                    // returns 0 if OK, -1 if not found
+void     mag_read_xyz(int16_t *x, int16_t *y, int16_t *z);
+float    mag_raw_to_mgauss(int16_t raw, uint8_t ctrl_reg2);
+// MAGNETOMETER OFFSET CALIBRATION
+
+void     mag_write_offsets(int16_t x, int16_t y, int16_t z);
+void     mag_read_offsets(int16_t *x, int16_t *y, int16_t *z);
+void     mag_calibrate(uint32_t samples);   // rotate the board by hand while this runs
 /** Device Identification (Who am I) **/
 #define LSM9DS1_IMU_ID             0x68U
 
