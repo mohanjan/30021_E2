@@ -2,7 +2,6 @@
 //#include "lsm9ds1_reg.h"
 
 // Initialize private functions.
-static uint8_t get_AG_status(void);
 static uint8_t M_read8(uint8_t addr);
 static uint8_t AG_read8(uint8_t addr);
 static void M_write(uint8_t addr, uint8_t data_in);
@@ -376,16 +375,10 @@ uint8_t get_AG_status(void) {
 }
 
 int16_t read_temp(void) {
-	// Wait for new temperature value to be ready.
-	while(!(get_AG_status() & 0x04)) {}
-
 	return ((int16_t)AG_read8(LSM9DS1_OUT_TEMP_H) << 8) | (int16_t)AG_read8(LSM9DS1_OUT_TEMP_L);
 }
 
 void read_gy(int16_t *value) {
-	// Wait for new gyroscope value to be ready.
-	while(!(get_AG_status() & 0x02)) {}
-
 	value[0] = ((int16_t)AG_read8(LSM9DS1_OUT_X_H_G) << 8) | (int16_t)AG_read8(LSM9DS1_OUT_X_L_G);
 	value[1] = ((int16_t)AG_read8(LSM9DS1_OUT_Y_H_G) << 8) | (int16_t)AG_read8(LSM9DS1_OUT_Y_L_G);
 	value[2] = ((int16_t)AG_read8(LSM9DS1_OUT_Z_H_G) << 8) | (int16_t)AG_read8(LSM9DS1_OUT_Z_L_G);
@@ -394,9 +387,6 @@ void read_gy(int16_t *value) {
 }
 
 void read_xl(int16_t *value) {
-	// Wait for new acceleromter value to be ready.
-	while(!(get_AG_status() & 0x01)) {}
-
 	value[0] = ((int16_t)AG_read8(LSM9DS1_OUT_X_H_XL) << 8) | (int16_t)AG_read8(LSM9DS1_OUT_X_L_XL);
 	value[1] = ((int16_t)AG_read8(LSM9DS1_OUT_Y_H_XL) << 8) | (int16_t)AG_read8(LSM9DS1_OUT_Y_L_XL);
 	value[2] = ((int16_t)AG_read8(LSM9DS1_OUT_Z_H_XL) << 8) | (int16_t)AG_read8(LSM9DS1_OUT_Z_L_XL);

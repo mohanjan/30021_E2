@@ -132,6 +132,7 @@ void     mag_calibrate(uint32_t samples);   // rotate the board by hand while th
 
 // Temperature, Accelerometer, Gyroscope functions
 int init_AG(void);
+uint8_t get_AG_status(void);
 int16_t read_temp(void);
 void read_gy(int16_t *value);
 void read_xl(int16_t *value);
