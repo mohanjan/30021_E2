@@ -2,9 +2,16 @@
 
 void exercise_4_1(void) {
     init_spi_lsm9ds1();
+    init_AG();
 
+    int16_t temp_raw, data_raw_xl[3], data_raw_gy[3];
+	int16_t offset_gy_raw[3], offset_xl_raw[3];
     int16_t mag_x, mag_y, mag_z;           // raw magnetometer values
     int16_t off_x, off_y, off_z;           // offsets stored in the sensor
+
+	float temp;
+	float xl_x, xl_y, xl_z;
+	float gy_x, gy_y, gy_z;
 
     if (mag_init() != 0) {
         printf("LSM9DS1 magnetometer not found\n");
@@ -12,19 +19,6 @@ void exercise_4_1(void) {
     }
 
     uint8_t scale = lsm9ds1_read8(CTRL_REG2_M);   // Currently it is set to +- 4gauss
-
-    // For testing read and write
-	uint8_t data_out8;
-	uint16_t data_out16;
-	init_spi_lsm9ds1();
-	init_AG();
-
-	int16_t temp_raw, data_raw_xl[3], data_raw_gy[3];
-	int16_t offset_gy_raw[3], offset_xl_raw[3];
-
-	float temp;
-	float xl_x, xl_y, xl_z;
-	float gy_x, gy_y, gy_z;
 
 	// Calibrate static offsets when the board is sitting still.
 	calibrate_gy(offset_gy_raw);
@@ -75,7 +69,7 @@ void exercise_4_1(void) {
 		float y_mg = mag_raw_to_mgauss(mag_y, scale);
 		float z_mg = mag_raw_to_mgauss(mag_z, scale);
 
-		printf("X=%d Y=%d Z=%d (raw)\n", x_mg, y_mg, z_mg);
+		printf("X=%4.2f\t Y=%4.2f\t Z=%4.2f\t (raw)\n", x_mg, y_mg, z_mg);
 
 		// lsm9ds1_write(WHO_AM_I, 0xAA);
 	}
