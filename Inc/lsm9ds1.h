@@ -8,14 +8,6 @@
 #define LSM9DS1_H_
 
 
-// SPI INIT, READ AND WRITE //
-void init_spi_lsm9ds1(void);
-uint8_t lsm9ds1_read8(uint8_t addr);
-uint16_t lsm9ds1_read16(uint8_t addr);
-void lsm9ds1_write(uint8_t addr, uint8_t data_in);
-void lsm9ds1_write16(uint8_t addr, uint16_t data_in);   // low byte first. TODO only works for magnetometer
-
-
 // MAGNETOMETER REGISTER ADRESSES
 // Register addresses: LSM9DS1 datasheet, magnetometer register map
 // Table 22. Magnetic sensor register address map
@@ -36,16 +28,7 @@ void lsm9ds1_write16(uint8_t addr, uint16_t data_in);   // low byte first. TODO 
 #define OFFSET_X_REG_L_M    0x05    // high byte is 0x06
 #define OFFSET_Y_REG_L_M    0x07    // high byte is 0x08
 #define OFFSET_Z_REG_L_M    0x09    // high byte is 0x0A
-// MAGNETOMETER
-// Initialization, read and convert
-int      mag_init(void);                    // returns 0 if OK, -1 if not found
-void     mag_read_xyz(int16_t *x, int16_t *y, int16_t *z);
-float    mag_raw_to_mgauss(int16_t raw, uint8_t ctrl_reg2);
-// MAGNETOMETER OFFSET CALIBRATION
 
-void     mag_write_offsets(int16_t x, int16_t y, int16_t z);
-void     mag_read_offsets(int16_t *x, int16_t *y, int16_t *z);
-void     mag_calibrate(uint32_t samples);   // rotate the board by hand while this runs
 /** Device Identification (Who am I) **/
 #define LSM9DS1_IMU_ID             0x68U
 
@@ -130,9 +113,26 @@ void     mag_calibrate(uint32_t samples);   // rotate the board by hand while th
 #define LSM9DS1_INT_THS_L_M        0x32U
 #define LSM9DS1_INT_THS_H_M        0x33U
 
-// Public functions
+// SPI INIT, READ AND WRITE //
 void init_spi_lsm9ds1(void);
+uint8_t lsm9ds1_read8(uint8_t addr);
+uint16_t lsm9ds1_read16(uint8_t addr);
+void lsm9ds1_write(uint8_t addr, uint8_t data_in);
+void lsm9ds1_write16(uint8_t addr, uint16_t data_in);   // low byte first. TODO only works for magnetometer
+
+// MAGNETOMETER
+// Initialization, read and convert
+int      mag_init(void);                    // returns 0 if OK, -1 if not found
+void     mag_read_xyz(int16_t *x, int16_t *y, int16_t *z);
+
+// MAGNETOMETER OFFSET CALIBRATION
+void     mag_write_offsets(int16_t x, int16_t y, int16_t z);
+void     mag_read_offsets(int16_t *x, int16_t *y, int16_t *z);
+void     mag_calibrate(uint32_t samples);   // rotate the board by hand while this runs
+
+// Temperature, Accelerometer, Gyroscope functions
 int init_AG(void);
+uint8_t get_AG_status(void);
 int16_t read_temp(void);
 void read_gy(int16_t *value);
 void read_xl(int16_t *value);
@@ -140,6 +140,7 @@ void calibrate_gy(int16_t *offset);
 void calibrate_xl(int16_t *offset);
 
 // Helper converter functions
+float    mag_raw_to_mgauss(int16_t raw, uint8_t ctrl_reg2);
 float_t temp_raw_to_float(int16_t temp_raw);
 float_t fs2000dps_to_mdps(int16_t gy_raw);
 float_t fs4g_to_mg(int16_t xl_raw);
