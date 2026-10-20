@@ -68,12 +68,26 @@ void openlog_init(uint32_t baud) {
     GPIOA->PUPDR   &= ~((0x03 << (9 * 2)) | (0x03 << (10 * 2)));
     GPIOA->PUPDR   |=  ((0x01 << (9 * 2)) | (0x01 << (10 * 2)));
 
+    // Connect PA12 to USART1_RTS (Alternate Function 7)
+    GPIOA->AFR[1] &= ~(0x0F << ((12 - 8) * 4));
+    GPIOA->AFR[1] |=  (0x07 << ((12 - 8) * 4));
+
+    // Configure PA12 for alternate function push-pull, pull-up
+    GPIOA->OSPEEDR &= ~(0x03 << (12 * 2));
+    GPIOA->OSPEEDR |=  (0x01 << (12 * 2));
+    GPIOA->OTYPER  &= ~(0x01 << 12);
+    GPIOA->MODER   &= ~(0x03 << (12 * 2));
+    GPIOA->MODER   |=  (0x02 << (12 * 2));
+    GPIOA->PUPDR   &= ~(0x03 << (12 * 2));
+    GPIOA->PUPDR   |=  (0x01 << (12 * 2));
+
     // Configure USART1 registers
     USART1->CR1 &= ~0x00000001; // Disable USART1
     USART1->CR2 &= ~0x00003000; // 1 stop bit
     USART1->CR1 &= ~(0x00001000 | 0x00000400 | 0x00000200); // 8 bits, no parity
     USART1->CR1 |=  (0x00000004 | 0x00000008); // Enable RX and TX
-    USART1->CR3 &= ~(0x00000100 | 0x00000200); // No hardware flow control
+    USART1->CR3 &= ~0x00000200;   // Disable CTS (bit 9)
+    USART1->CR3 |=  0x00000100;   // Enable RTS  (bit 8)
 
     // Set Baud Rate (9600 Baud @ 8 MHz clock = 833)
     RCC_ClocksTypeDef RCC_ClocksStatus;
@@ -100,6 +114,7 @@ void openlog_put_string(const char *str) {
 
 // Receive a single character from OpenLog over USART1 (blocking)
 uint8_t openlog_get_char(void) {
+
     while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET) {}
     return (uint8_t)(USART_ReceiveData(USART1) & 0xFF);
 }
