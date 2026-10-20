@@ -22,6 +22,14 @@ void uart_put_char(uint8_t c) {
     while(USART_GetFlagStatus(USART2, USART_FLAG_TXE)  == RESET){}
 }
 
+// Transmit a string to OpenLog over USART1
+void uart2_put_string(const char *str) {
+    while (*str) {
+        uart_put_char((uint8_t)*str++);
+    }
+}
+
+
 int _write_r(struct _reent *r, int file, char *ptr, int len) {
     int n;
 

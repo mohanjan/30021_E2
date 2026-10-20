@@ -9,5 +9,6 @@ void openlog_init(uint32_t baud);
 void openlog_put_char(uint8_t c);
 void openlog_put_string(const char *str);
 uint8_t openlog_get_char(void);
+uint8_t* openlog_get_response();
 
 #endif

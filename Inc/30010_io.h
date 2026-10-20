@@ -19,6 +19,7 @@ void uart_put_char(uint8_t c);
 uint8_t uart_get_char();
 uint8_t uart_get_count();
 void uart_clear();
+void uart2_put_string(const char *str);
 
 /*****************************/
 /*** LCD Control Functions ***/
