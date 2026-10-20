@@ -208,8 +208,8 @@ void GPIO_set_AF1_PB11(){
     GPIO_PinAFConfig(GPIOB, 11 ,GPIO_AF_1);
 }
 
-// Datasheet table 14: PA5, TIM2_CH1
-void GPIO_set_AF_PA5(void)
+// Datasheet table 14: PA0, TIM2_CH1
+void GPIO_set_AF_PA0(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
 
@@ -217,12 +217,12 @@ void GPIO_set_AF_PA5(void)
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
     GPIO_StructInit(&GPIO_InitStruct);
     GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_AF;
-    GPIO_InitStruct.GPIO_Pin   = GPIO_Pin_5;
+    GPIO_InitStruct.GPIO_Pin   = GPIO_Pin_0;
     GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_DOWN;
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    GPIO_PinAFConfig(GPIOA, GPIO_PinSource5, GPIO_AF_1);  // GPIO_AF_1 :  OUT, TIM2, TIM15, TIM16, TIM17
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource0, GPIO_AF_1);  // GPIO_AF_1 :  OUT, TIM2, TIM15, TIM16, TIM17
 }
 
 //  22.2.4 TIM Driver: how to use it in Input Capture Mode
@@ -233,7 +233,7 @@ void TIM2_PWMInput_Init(void)
     NVIC_InitTypeDef        NVIC_InitStructure; // settings for one interrupt line in the NVIC (Nested Vectored Interrupt Controller)
 
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-    GPIO_set_AF_PA5();
+    GPIO_set_AF_PA0();
 
     // Input capture: CH1 rising edge, CH2 configured automatically
     // for the opposite edge on the same pin
@@ -255,7 +255,7 @@ void TIM2_PWMInput_Init(void)
 
     // Time base: 1 MHz tick, 32-bit counter
     TIM_TimeBaseStructInit(&TIM_InitStructure);
-    TIM_InitStructure.TIM_Prescaler     = 71;
+    TIM_InitStructure.TIM_Prescaler     = 63;
     TIM_InitStructure.TIM_CounterMode   = TIM_CounterMode_Up;
     TIM_InitStructure.TIM_Period        = 0xFFFFFFFF; // Counts up to max (overflow) Auto reload = period
     TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1; // no clock division

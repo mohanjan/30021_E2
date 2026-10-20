@@ -113,8 +113,8 @@ void exercise_6_1(void) {
 
 	    if (ICValid) {
 	        NVIC_DisableIRQ(TIM2_IRQn);
-	        p = ICValue1;
-	        h = ICValue2;
+	        p = ICValue1 + 1;
+	        h = ICValue2 + 1;
 	        ICValid = 0;
 	        NVIC_EnableIRQ(TIM2_IRQn);
 
