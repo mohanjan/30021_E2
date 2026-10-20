@@ -12,7 +12,7 @@
 void exercise_3_1(void)
 {
 	GPIO_set_AF1_PA6();
-	TIM16_init();
+	TIM16_init_10kHz();
 	TIM16_PWM_init();
 
 

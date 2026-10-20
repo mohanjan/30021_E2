@@ -12,7 +12,6 @@ void initJoystick(void)
     // -------------------------
     // Configure PC0 and PC1
     // -------------------------
-
     GPIO_StructInit(&GPIO_InitStruct);
 
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
@@ -21,11 +20,9 @@ void initJoystick(void)
 
     GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-
     // -------------------------
     // Configure PA4
     // -------------------------
-
     GPIO_StructInit(&GPIO_InitStruct);
 
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
@@ -34,11 +31,9 @@ void initJoystick(void)
 
     GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-
     // -------------------------
     // Configure PB5 and PB0
     // -------------------------
-
     GPIO_StructInit(&GPIO_InitStruct);
 
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_0;
@@ -187,7 +182,6 @@ void initEXTI(void)
     NVIC_Init(&NVIC_InitStructure);
 }
 
-
 void initLed(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
@@ -227,7 +221,6 @@ void initLed(void)
     // Start with LED off
     setLed(LED_OFF);
 }
-
 
 void setLed(LedColor color)
 {

@@ -19,7 +19,7 @@ typedef struct {
 //volatile uint8_t clock_running = 0;
 //volatile uint8_t second_changed_flag = 0;
 
-static Time_t GetTimeAtomic(volatile Time_t *src);
+Time_t GetTimeAtomic(volatile Time_t *src);
 void initTimer2_100Hz(void);
 void TIM2_IRQHandler(void);
 void TIM2_PWM_init();
