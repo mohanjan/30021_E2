@@ -75,28 +75,6 @@ void exercise_6_1(void) {
 
 	// Resoluition: 1 tick = 1% of period (good enough?)
 
-	RCC_ClocksTypeDef clocks;
-
-	RCC_GetClocksFreq(&clocks);
-
-	uint32_t sysclk = clocks.SYSCLK_Frequency;
-	uint32_t hclk   = clocks.HCLK_Frequency;
-	uint32_t pclk1  = clocks.PCLK1_Frequency;
-	uint32_t pclk2  = clocks.PCLK2_Frequency;
-
-	printf("\nsysclk = %ld\thclk = %ld\tpclk1 = %ld\tpclk2 = %ld\n",sysclk,hclk,pclk1,pclk2);
-
-//	RCC_PLLConfig(2,2);
-//
-//	RCC_GetClocksFreq(&clocks);
-//
-//	uint32_t sysclk = clocks.SYSCLK_Frequency;
-//	uint32_t hclk   = clocks.HCLK_Frequency;
-//	uint32_t pclk1  = clocks.PCLK1_Frequency;
-//	uint32_t pclk2  = clocks.PCLK2_Frequency;
-//
-//	printf("sysclk = %ld\thclk = %ld\tpclk1 = %ld\tpclk2 = %ld\n",sysclk,hclk,pclk1,pclk2);
-
 	uint32_t p, h;
 	TIM2_PWMInput_Init();
 
