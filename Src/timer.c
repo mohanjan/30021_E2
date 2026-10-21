@@ -4,10 +4,7 @@
 #include "stm32f30x_tim.h"
 
 
-
-// Split Time Storage
-
-static Time_t GetTimeAtomic(volatile Time_t *src)
+Time_t GetTimeAtomic(volatile Time_t *src)
 {
     Time_t temp;
     __disable_irq(); // Enter Critical Section
@@ -40,53 +37,6 @@ void initTimer2_100Hz()
     TIM_Cmd(TIM2, ENABLE);
 }
 
-
-
-/*void TIM2_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
-    {
-        // 1. Update Stopwatch Counter
-        if (clock_running)
-        {
-            clock_time.hundredths++;
-            if (clock_time.hundredths >= 100)
-            {
-                clock_time.hundredths = 0;
-                clock_time.seconds++;
-                second_changed_flag = 1;
-
-                if (clock_time.seconds >= 60)
-                {
-                    clock_time.seconds = 0;
-                    clock_time.minutes++;
-                    if (clock_time.minutes >= 60)
-                    {
-                        clock_time.minutes = 0;
-                        clock_time.hours++;
-                        if (clock_time.hours >= 24)
-                            clock_time.hours = 0;
-                    }
-                }
-            }
-        }
-
-        // 2. Poll Joystick State every 10ms (100Hz Interrupt)
-        static uint8_t last_state = 0;
-        uint8_t state = readJoystick();
-
-        // Trigger event flag only on state changes (Edge Detection + Debounce)
-        if (state != last_state)
-        {
-            current_joystick_state = state;
-            joystick_flag = 1; // Signal main event loop
-            last_state = state;
-        }
-
-        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-    }
-}*/
-
 void TIM2_init_50Hz(){
     //configure TIM16
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
@@ -116,7 +66,6 @@ void TIM16_init_50Hz(){
     TIM_TimeBaseInit(TIM16, &TIM_InitStructure);
 
 }
-
 
 void TIM16_init_10kHz(){
     //configure TIM16
@@ -171,7 +120,6 @@ void TIM16_PWM_init()
     TIM_Cmd(TIM16,ENABLE);
 }
 
-
 void GPIO_set_AF1_PA6(){
     //configure GPIO pins
     GPIO_InitTypeDef GPIO_InitStruct;
@@ -194,7 +142,7 @@ void GPIO_set_AF1_PB11(){
     //configure GPIO pins
     GPIO_InitTypeDef GPIO_InitStruct;
 
-    /* Enable clock for GPIOA */
+    /* Enable clock for GPIOB */
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
 
     GPIO_StructInit(&GPIO_InitStruct);
@@ -209,12 +157,13 @@ void GPIO_set_AF1_PB11(){
 }
 
 // Datasheet table 14: PA0, TIM2_CH1
-void GPIO_set_AF_PA0(void)
+void GPIO_set_AF1_PA0(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
 
     /* Enable clock for GPIOA */
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+
     GPIO_StructInit(&GPIO_InitStruct);
     GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_AF;
     GPIO_InitStruct.GPIO_Pin   = GPIO_Pin_0;
@@ -233,7 +182,7 @@ void TIM2_PWMInput_Init(void)
     NVIC_InitTypeDef        NVIC_InitStructure; // settings for one interrupt line in the NVIC (Nested Vectored Interrupt Controller)
 
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-    GPIO_set_AF_PA0();
+    GPIO_set_AF1_PA0();
 
     // Input capture: CH1 rising edge, CH2 configured automatically
     // for the opposite edge on the same pin
@@ -251,7 +200,6 @@ void TIM2_PWMInput_Init(void)
     TIM_SelectInputTrigger(TIM2, TIM_TS_TI1FP1);
     TIM_SelectSlaveMode(TIM2, TIM_SlaveMode_Reset);
     TIM_SelectMasterSlaveMode(TIM2, TIM_MasterSlaveMode_Enable);
-
 
     // Time base: 1 MHz tick, 32-bit counter
     TIM_TimeBaseStructInit(&TIM_InitStructure);

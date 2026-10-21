@@ -2,18 +2,21 @@
 #include "stm32f30x.h"
 #include "gpio.h"
 
-#define TIM_TICK_US  1.0f    // (PSC + 1) / 72 MHz = 1 micro second
+#define TIM_TICK_US  1.0f    // (PSC + 1) / 64 MHz = 1 micro second
 
 volatile uint32_t ICValue1, ICValue2; // Initialize variables to store last readings of the CCR1 and CCR2
 volatile uint8_t  ICValid = 0; // Flag to see if new reading is available
 
 void TIM2_IRQHandler(void) {
 	// ISR = Interrupt Service Routine.
-    TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
+    {
+		TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
 
-    ICValue1 = TIM_GetCapture1(TIM2); // Period from CCR1
-    ICValue2 = TIM_GetCapture2(TIM2); // Width from CCR2
-    ICValid = 1;
+		ICValue1 = TIM_GetCapture1(TIM2); // Period from CCR1
+		ICValue2 = TIM_GetCapture2(TIM2); // Width from CCR2
+		ICValid = 1;
+    }
 }
 
 // Code for calculating running average
@@ -72,6 +75,28 @@ void exercise_6_1(void) {
 
 	// Resoluition: 1 tick = 1% of period (good enough?)
 
+	RCC_ClocksTypeDef clocks;
+
+	RCC_GetClocksFreq(&clocks);
+
+	uint32_t sysclk = clocks.SYSCLK_Frequency;
+	uint32_t hclk   = clocks.HCLK_Frequency;
+	uint32_t pclk1  = clocks.PCLK1_Frequency;
+	uint32_t pclk2  = clocks.PCLK2_Frequency;
+
+	printf("\nsysclk = %ld\thclk = %ld\tpclk1 = %ld\tpclk2 = %ld\n",sysclk,hclk,pclk1,pclk2);
+
+//	RCC_PLLConfig(2,2);
+//
+//	RCC_GetClocksFreq(&clocks);
+//
+//	uint32_t sysclk = clocks.SYSCLK_Frequency;
+//	uint32_t hclk   = clocks.HCLK_Frequency;
+//	uint32_t pclk1  = clocks.PCLK1_Frequency;
+//	uint32_t pclk2  = clocks.PCLK2_Frequency;
+//
+//	printf("sysclk = %ld\thclk = %ld\tpclk1 = %ld\tpclk2 = %ld\n",sysclk,hclk,pclk1,pclk2);
+
 	uint32_t p, h;
 	TIM2_PWMInput_Init();
 
@@ -80,7 +105,6 @@ void exercise_6_1(void) {
 	initLed();
 	initEXTI();
 	__enable_irq();
-
 
 	uint8_t running = 1; // flag to indicate that program is running (0 = stop, 1 = running)
 	setLed(LED_GREEN);   // start in "running" state
