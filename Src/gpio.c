@@ -112,7 +112,7 @@ void initEXTI9_5(void)
 	EXTI_InitStructure.EXTI_Line = EXTI_Line5;
 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-	// EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+//	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; // Both rising and falling
 	EXTI_Init(&EXTI_InitStructure);
 
@@ -130,10 +130,12 @@ void initEXTI(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
     /* Connect EXTI lines to GPIO pins */
-    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource0); // PC0 Right
-    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource1); // PC1 Left
+    // Note Down and Right cannot both be used as they share the same EXTI line.
     SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource4); // PA4 Up
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource0); // PB0 Down
     SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource5); // PB5 Center
+//    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource0); // PC0 Right
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource1); // PC1 Left
 
     EXTI_InitTypeDef EXTI_InitStructure;
 

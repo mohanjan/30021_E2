@@ -56,7 +56,7 @@ float avg_period_ticks(void) { return avg_count ? (float)psum / avg_count : 0.0f
 float avg_high_ticks(void)   { return avg_count ? (float)hsum / avg_count : 0.0f; }
 
 void exercise_6_1(void) {
-
+	printf("\n#TODO: Find out why A5 is not working, check pull on pin, and when not putting an input on it, if there is something to see.\n");
 	// Calculate the prescaler so it results in a counter clock frequency of 1MHz; i.e. a period of 1uS
 	// Use timer as counter
 	// TIM2 is 32 bit counter (Counts up to 65536) See Table 5
@@ -107,7 +107,8 @@ void exercise_6_1(void) {
 	        }
 
 	        if (current_joystick_state & JOYSTICK_DOWN) {     // reset instrument
-	            avg_reset();
+	        	setLed(LED_BLUE);
+	        	avg_reset();
 	            ICValid = 0;
 	            printf("\r\n--- reset ---\r\n");
 	        }
