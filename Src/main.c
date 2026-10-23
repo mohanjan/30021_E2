@@ -6,11 +6,10 @@
 
 int main(void)
 {
-    uart_init(9600);
-
     exercise_5();
 
-    while (1)
+/*    while (1)
     {
     }
+    */
 }
