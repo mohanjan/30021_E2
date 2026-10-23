@@ -9,14 +9,11 @@ volatile uint8_t  ICValid = 0; // Flag to see if new reading is available
 
 void TIM2_IRQHandler(void) {
 	// ISR = Interrupt Service Routine.
-    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
-    {
-		TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+	TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
 
-		ICValue1 = TIM_GetCapture1(TIM2); // Period from CCR1
-		ICValue2 = TIM_GetCapture2(TIM2); // Width from CCR2
-		ICValid = 1;
-    }
+	ICValue1 = TIM_GetCapture1(TIM2); // Period from CCR1
+	ICValue2 = TIM_GetCapture2(TIM2); // Width from CCR2
+	ICValid = 1;
 }
 
 // Code for calculating running average
