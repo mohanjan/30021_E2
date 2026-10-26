@@ -3,25 +3,6 @@
 
 #define TIM_TICK_US  1.0f    // (PSC + 1) / 64 MHz = 1 micro second
 
-volatile uint32_t ICValue1, ICValue2; // Initialize variables to store last readings of the CCR1 and CCR2
-volatile uint8_t  ICValid = 0; // Flag to see if new reading is available
-
-void TIM2_IRQHandler(void) {
-	// ISR = Interrupt Service Routine.
-	TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
-
-	ICValue1 = TIM_GetCapture1(TIM2); // Period from CCR1
-	ICValue2 = TIM_GetCapture2(TIM2); // Width from CCR2
-	ICValid = 1;
-}
-
-// Code for calculating running average
-#define AVG_N 10
-//static uint32_t pbuf[AVG_N], hbuf[AVG_N];
-//static uint64_t psum = 0, hsum = 0;
-//static uint8_t  avg_idx = 0, avg_count = 0;
-
-
 void exercise_6_2(void) {
 	TIM2_PWMInput_Init();
 	__enable_irq();
@@ -47,8 +28,6 @@ void exercise_6_2(void) {
 	        NVIC_EnableIRQ(TIM2_IRQn);
 
 	        distance = pulse_width/58;
-	        // distance[cm] = (Speed of sounds * pulse_width[µs] * 0.001) / 2
-//	        distance = (343 * pulse_width * 0.001) / 2;
 
 	        printf("Distance = %.2f cm, Width of pulse = %.2f µs\r",distance,pulse_width);
 	    }

@@ -220,3 +220,14 @@ void TIM2_PWMInput_Init(void)
     TIM_Cmd(TIM2, ENABLE); // Enable the entire TIM counter
 }
 
+volatile uint32_t ICValue1 = 0, ICValue2 = 0; // Initialize variables to store last readings of the CCR1 and CCR2
+volatile uint8_t  ICValid = 0; // Flag to see if new reading is available
+
+void TIM2_IRQHandler(void) {
+	// ISR = Interrupt Service Routine.
+	TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+
+	ICValue1 = TIM_GetCapture1(TIM2); // Period from CCR1
+	ICValue2 = TIM_GetCapture2(TIM2); // Width from CCR2
+	ICValid = 1;
+}

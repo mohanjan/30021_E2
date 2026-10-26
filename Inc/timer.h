@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include "stm32f30x_tim.h"
 
-
 // Time Structure
 typedef struct {
     volatile uint8_t hours;
@@ -13,11 +12,10 @@ typedef struct {
     volatile uint8_t hundredths;
 } Time_t;
 
-
-// Global Time Registers
-//volatile Time_t clock_time = {0, 0, 0, 0};
-//volatile uint8_t clock_running = 0;
-//volatile uint8_t second_changed_flag = 0;
+// Interrupt handler variables
+extern volatile uint32_t ICValue1;
+extern volatile uint32_t ICValue2;
+extern volatile uint8_t ICValid;
 
 Time_t GetTimeAtomic(volatile Time_t *src);
 void initTimer2_100Hz(void);
