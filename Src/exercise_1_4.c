@@ -1,4 +1,5 @@
-/*#include "gpio.h"
+#include "gpio.h"
+#include "timer.h"
 
 void uart_send_string(const char *str)
 {
@@ -12,14 +13,6 @@ void uart_send_string(const char *str)
     }
 }
 
-// Time Structure
-typedef struct {
-    volatile uint8_t hours;
-    volatile uint8_t minutes;
-    volatile uint8_t seconds;
-    volatile uint8_t hundredths;
-} Time_t;
-
 // Global Time Registers
 volatile Time_t clock_time = {0, 0, 0, 0};
 volatile uint8_t clock_running = 0;
@@ -28,84 +21,6 @@ volatile uint8_t second_changed_flag = 0;
 // Split Time Storage
 Time_t split1 = {0, 0, 0, 0};
 Time_t split2 = {0, 0, 0, 0};
-
-static Time_t GetTimeAtomic(volatile Time_t *src)
-{
-    Time_t temp;
-    __disable_irq(); // Enter Critical Section
-    temp.hours = src->hours;
-    temp.minutes = src->minutes;
-    temp.seconds = src->seconds;
-    temp.hundredths = src->hundredths;
-    __enable_irq();  // Exit Critical Section
-    return temp;
-}
-
-void initTimer2_100Hz(void)
-{
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-
-    TIM_TimeBaseInitTypeDef TIM_InitStructure;
-    TIM_TimeBaseStructInit(&TIM_InitStructure);
-    TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-    TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_InitStructure.TIM_Prescaler = 6399;   // 64MHz / 6400 = 10kHz
-    TIM_InitStructure.TIM_Period = 99;        // 10kHz / 100 = 100 Hz (10ms)
-    TIM_TimeBaseInit(TIM2, &TIM_InitStructure);
-
-    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
-
-    // Set Priority to 0 (Highest priority)
-    NVIC_SetPriority(TIM2_IRQn, 0);
-    NVIC_EnableIRQ(TIM2_IRQn);
-
-    TIM_Cmd(TIM2, ENABLE);
-}
-
-void TIM2_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
-    {
-        // 1. Update Stopwatch Counter
-        if (clock_running)
-        {
-            clock_time.hundredths++;
-            if (clock_time.hundredths >= 100)
-            {
-                clock_time.hundredths = 0;
-                clock_time.seconds++;
-                second_changed_flag = 1;
-
-                if (clock_time.seconds >= 60)
-                {
-                    clock_time.seconds = 0;
-                    clock_time.minutes++;
-                    if (clock_time.minutes >= 60)
-                    {
-                        clock_time.minutes = 0;
-                        clock_time.hours++;
-                        if (clock_time.hours >= 24)
-                            clock_time.hours = 0;
-                    }
-                }
-            }
-        }
-
-        // 2. Poll Joystick State every 10ms (100Hz Interrupt)
-        static uint8_t last_state = 0;
-        uint8_t state = readJoystick();
-
-        // Trigger event flag only on state changes (Edge Detection + Debounce)
-        if (state != last_state)
-        {
-            current_joystick_state = state;
-            joystick_flag = 1; // Signal main event loop
-            last_state = state;
-        }
-
-        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-    }
-}
 
 void exercise_1_4(void)
 {
@@ -183,4 +98,4 @@ void exercise_1_4(void)
         }
     }
 }
-*/
+

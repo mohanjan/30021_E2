@@ -12,7 +12,6 @@ void initJoystick(void)
     // -------------------------
     // Configure PC0 and PC1
     // -------------------------
-
     GPIO_StructInit(&GPIO_InitStruct);
 
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
@@ -21,11 +20,9 @@ void initJoystick(void)
 
     GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-
     // -------------------------
     // Configure PA4
     // -------------------------
-
     GPIO_StructInit(&GPIO_InitStruct);
 
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
@@ -34,11 +31,9 @@ void initJoystick(void)
 
     GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-
     // -------------------------
     // Configure PB5 and PB0
     // -------------------------
-
     GPIO_StructInit(&GPIO_InitStruct);
 
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_0;
@@ -117,7 +112,7 @@ void initEXTI9_5(void)
 	EXTI_InitStructure.EXTI_Line = EXTI_Line5;
 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-	// EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+//	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; // Both rising and falling
 	EXTI_Init(&EXTI_InitStructure);
 
@@ -135,15 +130,18 @@ void initEXTI(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
     /* Connect EXTI lines to GPIO pins */
-    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource0); // PC0 Right
-    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource1); // PC1 Left
+    // Note Down and Right cannot both be used as they share the same EXTI line.
     SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource4); // PA4 Up
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource0); // PB0 Down
     SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource5); // PB5 Center
+//    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource0); // PC0 Right
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource1); // PC1 Left
 
     EXTI_InitTypeDef EXTI_InitStructure;
 
     EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+    // EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 
     /* EXTI0: PC0 */
@@ -186,7 +184,6 @@ void initEXTI(void)
     NVIC_Init(&NVIC_InitStructure);
 }
 
-
 void initLed(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
@@ -226,7 +223,6 @@ void initLed(void)
     // Start with LED off
     setLed(LED_OFF);
 }
-
 
 void setLed(LedColor color)
 {
