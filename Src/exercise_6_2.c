@@ -20,7 +20,6 @@ void exercise_6_2(void) {
 
 		Echo detect pulse width in muS --> conert to range (cm) by muS / 58 (GPIO) */
 
-
 	    if (ICValid) {
 	        NVIC_DisableIRQ(TIM2_IRQn);
 	        pulse_width = ICValue2 + 1;
@@ -28,8 +27,15 @@ void exercise_6_2(void) {
 	        NVIC_EnableIRQ(TIM2_IRQn);
 
 	        distance = pulse_width/58;
+	        // Fall back in case distance measured is greater than 400cm
+	        if (distance > 400.0f) {
+	        	printf("Distance < 400 cm, Width of pulse < 23200 us\r");
+	        }
+	        else {
+	        	printf("Distance = %.2f cm, Width of pulse = %.2f us\r",distance,pulse_width);
+	        }
 
-	        printf("Distance = %.2f cm, Width of pulse = %.2f µs\r",distance,pulse_width);
+
 	    }
 	}
 }
