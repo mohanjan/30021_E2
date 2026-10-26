@@ -34,8 +34,6 @@ void exercise_6_2(void) {
 	        else {
 	        	printf("Distance = %.2f cm, Width of pulse = %.2f us\r",distance,pulse_width);
 	        }
-
-
 	    }
 	}
 }
